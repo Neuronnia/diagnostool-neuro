@@ -1,0 +1,75 @@
+import { useState } from 'react';
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+
+const data = [
+  {
+    codigo: "299.00",
+    nombre: "Trastorno del espectro autista",
+    palabrasClave: ["comunicación", "interacción social", "restringido", "rutinas"],
+    criterios: "A. Déficits persistentes en la comunicación e interacción social. B. Patrones restrictivos y repetitivos de comportamiento...",
+    diferenciales: "Discapacidad intelectual, trastornos del lenguaje, TDAH.",
+    comorbilidades: "TDAH, ansiedad, epilepsia.",
+    grupo: "Neurodesarrollo",
+    edadInicio: "Antes de los 3 años"
+  },
+  {
+    codigo: "314.01",
+    nombre: "TDAH, tipo combinado",
+    palabrasClave: ["inatención", "impulsividad", "hiperactividad", "distracción"],
+    criterios: "A. 6+ síntomas de inatención y 6+ de hiperactividad por al menos 6 meses...",
+    diferenciales: "Trastorno negativista desafiante, ansiedad, trastornos del estado de ánimo.",
+    comorbilidades: "Trastorno negativista, trastornos de aprendizaje.",
+    grupo: "Neurodesarrollo",
+    edadInicio: "Antes de los 12 años"
+  },
+  {
+    codigo: "315.00",
+    nombre: "Trastorno específico del aprendizaje",
+    palabrasClave: ["lectura", "escritura", "matemáticas", "dificultad escolar"],
+    criterios: "A. Dificultades persistentes en habilidades académicas clave por al menos 6 meses...",
+    diferenciales: "Dificultades escolares por falta de enseñanza, discapacidad intelectual.",
+    comorbilidades: "TDAH, ansiedad, baja autoestima.",
+    grupo: "Neurodesarrollo",
+    edadInicio: "Edad escolar"
+  }
+];
+
+export default function DiagnosToolNEURO() {
+  const [query, setQuery] = useState("");
+
+  const results = data.filter((item) =>
+    item.palabrasClave.some((palabra) =>
+      palabra.toLowerCase().includes(query.toLowerCase())
+    )
+  );
+
+  return (
+    <div className="p-4 max-w-3xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4 text-center">DiagnosTool NEURO</h1>
+      <Input
+        placeholder="Escribe una palabra clave (ej: hiperactividad)"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="mb-6"
+      />
+
+      {results.length > 0 ? (
+        results.map((item) => (
+          <Card key={item.codigo} className="mb-4 shadow-md">
+            <CardContent className="p-4">
+              <h2 className="text-xl font-semibold">{item.nombre} ({item.codigo})</h2>
+              <p><strong>Grupo clínico:</strong> {item.grupo}</p>
+              <p><strong>Edad de inicio:</strong> {item.edadInicio}</p>
+              <p><strong>Criterios diagnósticos:</strong> {item.criterios}</p>
+              <p><strong>Diferenciales:</strong> {item.diferenciales}</p>
+              <p><strong>Comorbilidades:</strong> {item.comorbilidades}</p>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <p className="text-center text-gray-500">No se encontraron resultados.</p>
+      )}
+    </div>
+  );
+}
